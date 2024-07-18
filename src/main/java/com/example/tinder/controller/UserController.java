@@ -3,6 +3,7 @@ package com.example.tinder.controller;
 import com.example.tinder.model.dto.UserDto;
 import com.example.tinder.model.entity.User;
 import com.example.tinder.model.repository.UserRepository;
+import com.example.tinder.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,19 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-//
-//@PostMapping("/login")
-//public String login(Model model, @RequestParam String email, @RequestParam String password) {
-//    User user = userRepository.login(email, password);
-//    if (user != null) {
-//        return "redirect:/people-list";  // Başarılı giriş
-//    } else {
-//        model.addAttribute("error", "Geçersiz email veya şifre");
-//        return "login";  // Giriş sayfasını tekrar göster
-//    }
-//}
 @GetMapping("login")
 public String loginGet(@ModelAttribute UserDto userDto, Model model) {
     model.addAttribute("userDTO", userDto);
@@ -38,7 +28,7 @@ public String loginGet(@ModelAttribute UserDto userDto, Model model) {
 }
     @PostMapping("login")
     public ModelAndView  loginPost(@Valid UserDto userDTO,ModelAndView model) {
-        User login = userRepository.login(userDTO.getEmail(), userDTO.getPassword());
+        User login = userService.login(userDTO.getEmail(), userDTO.getPassword());
         if (login != null) {
             model.setViewName("people-list");
             return model;

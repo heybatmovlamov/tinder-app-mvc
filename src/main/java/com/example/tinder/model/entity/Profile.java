@@ -11,6 +11,6 @@ public class Profile {
 
     private Long id;
     private String username;
-    private String url;
+    private String photoUrl;
 
 }
