@@ -1,8 +1,7 @@
 package com.example.tinder.controller;
 
 import com.example.tinder.model.dto.UserDto;
-import com.example.tinder.model.entity.UserEntity;
-import com.example.tinder.service.UserService;
+import com.example.tinder.service.userService.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 @RequiredArgsConstructor
 @Controller
@@ -24,9 +22,17 @@ public class UserController {
         return "login";
     }
 
-    @PostMapping("login")
-    public void loginPost(@Valid UserDto userDTO) {
-        userService.login(userDTO.getEmail(), userDTO.getPassword());
+    @PostMapping("/login")
+    public String loginPost(@Valid UserDto userDto, Model model) {
+        boolean loginSuccessful = userService.login(userDto.getEmail(), userDto.getPassword());
+        if (loginSuccessful) {
+            return "redirect:/people-list";
+        } else {
+            model.addAttribute("error", "Invalid email or password.");
+            return "login";
+        }
     }
+
+
 }
 
