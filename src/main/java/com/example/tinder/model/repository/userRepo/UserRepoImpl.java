@@ -1,13 +1,14 @@
-package com.example.tinder.model.repository;
+package com.example.tinder.model.repository.userRepo;
 
 import com.example.tinder.config.JdbcConfig;
-import com.example.tinder.model.entity.User;
+import com.example.tinder.model.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +18,8 @@ public class UserRepoImpl implements UserRepository {
 
     @SneakyThrows
     @Override
-    public User login(String email, String password) {
-        User user = null;
+    public Optional<UserEntity> login(String email, String password) {
+        UserEntity userEntity = null;
         String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
 
         PreparedStatement preparedStatement = jdbcConfig.getConnection().prepareStatement(sql);
@@ -27,8 +28,8 @@ public class UserRepoImpl implements UserRepository {
 
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
-            user = new User(resultSet.getString("email"), resultSet.getString("password"));
+            userEntity = new UserEntity(resultSet.getString("email"), resultSet.getString("password"));
         }
-        return user;
+        return Optional.ofNullable(userEntity);
     }
 }
