@@ -12,5 +12,12 @@ import java.time.LocalDateTime;
 public class PeopleDto {
 
     private String username;
+    private String photoUrl;
+
+    public PeopleDto(String username, String photoUrl) {
+        this.username = username;
+        this.photoUrl = photoUrl;
+    }
+
     private LocalDateTime time;
 }
