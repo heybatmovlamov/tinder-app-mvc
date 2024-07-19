@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class User {
+public class UserEntity {
 
     private Long id;
     private String email;
@@ -16,7 +16,7 @@ public class User {
     private String photo;
     private LocalDateTime loginTime;
 
-    public User(String email,String password){
+    public UserEntity(String email, String password){
         this.email= email;
         this.password = password;
     }
