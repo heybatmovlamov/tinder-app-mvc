@@ -13,8 +13,8 @@ public class UserEntity {
     private Long id;
     private String email;
     private String password;
-    private String photo;
     private LocalDateTime loginTime;
+    private Long profileId;
 
     public UserEntity(String email, String password){
         this.email= email;

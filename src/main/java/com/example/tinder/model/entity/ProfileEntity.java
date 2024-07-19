@@ -12,5 +12,6 @@ public class ProfileEntity {
     private Long id;
     private String username;
     private String photoUrl;
+    private Long userId;
 
 }
