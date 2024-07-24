@@ -4,7 +4,9 @@ import com.example.tinder.model.dto.UserDto;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Optional;
+
 @Repository
 public interface UserService {
-    boolean login(String email , String password);
+    Optional<UserDto> login(String email , String password);
 }
