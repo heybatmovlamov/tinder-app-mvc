@@ -9,15 +9,16 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PeopleDto {
+public class ProfileDto {
 
     private String username;
     private String photoUrl;
+    private long userId;
+    private LocalDateTime time;
 
-    public PeopleDto(String username, String photoUrl) {
+    public ProfileDto(String username, String photoUrl, long userId) {
         this.username = username;
         this.photoUrl = photoUrl;
+        this.userId = userId;
     }
-
-    private LocalDateTime time;
 }

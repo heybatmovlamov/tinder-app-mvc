@@ -4,20 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class UserEntity {
 
-    private Long id;
+    private long id;
     private String email;
     private String password;
+    private boolean profilesLiked;
     private LocalDateTime loginTime;
-    private Long profileId;
+    private Long personId;
 
-    public UserEntity(String email, String password){
+    public UserEntity(Long id ,String email, String password ,Long personId){
+        this.id = id;
         this.email= email;
         this.password = password;
+        this.personId = personId;
     }
 }
