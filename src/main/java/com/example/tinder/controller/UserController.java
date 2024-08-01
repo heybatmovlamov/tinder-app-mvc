@@ -29,7 +29,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginPost(@Valid UserDto userDto, Model model, HttpSession session) {
-        Optional<UserDto> loginSuccessful = userService.login(userDto.getEmail(), userDto.getPassword());
+        Optional<UserDto> loginSuccessful = userService.login(userDto.getEmail(), userDto.getPassword(),session);
         log.info(loginSuccessful.toString());
         if (loginSuccessful.isPresent()) {
             UserDto loginSuccessDto = loginSuccessful.get();
