@@ -1,7 +1,6 @@
-package com.example.tinder.model.repository.PeopleRepo;
+package com.example.tinder.model.repository.profileRepo;
 
 import com.example.tinder.config.JdbcConfig;
-import com.example.tinder.model.dto.ProfileDto;
 import com.example.tinder.model.entity.ProfileEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -22,7 +21,7 @@ public class ProfileRepoImpl implements ProfileRepository {
 
     @SneakyThrows
     @Override
-    public List<ProfileEntity> users() {
+    public List<ProfileEntity> getAllUsers() {
         List<ProfileEntity> entities = new ArrayList<>();
         Connection connection = jdbcConfig.getConnection();
 

@@ -12,12 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 
-@RequiredArgsConstructor
 @Controller
+@RequiredArgsConstructor
 @Slf4j
 public class ProfileController {
 
@@ -29,11 +30,10 @@ public class ProfileController {
         return "like-page";
     }
 
-
     @PostMapping("/like")
-    public String likePost(HttpSession session, boolean like) {
-        profileService.likePost(session,like);
-        return "like-page";
+    public String likePost(HttpSession session, @RequestParam boolean like) {
+        profileService.likePost(session, like);
+        return "redirect:/like"; // Sayfayı yenilemek için yönlendirme
     }
 }
 
