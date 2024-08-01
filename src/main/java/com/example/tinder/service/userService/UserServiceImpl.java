@@ -3,6 +3,7 @@ package com.example.tinder.service.userService;
 import com.example.tinder.model.dto.UserDto;
 import com.example.tinder.model.entity.UserEntity;
 import com.example.tinder.model.repository.userRepo.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,10 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
+    private static Integer currentProfileIndex = 0 ;
     @Override
-    public Optional<UserDto> login(String email, String password) {
+    public Optional<UserDto> login(String email, String password , HttpSession session) {
+        session.setAttribute("currentProfileIndex",currentProfileIndex);
         Optional<UserEntity> userOptional = userRepository.login(email, password);
         if (userOptional.isPresent()) {
             UserEntity userEntity = userOptional.get();
@@ -29,5 +31,6 @@ public class UserServiceImpl implements UserService {
             return Optional.empty(); // Return false to indicate failed login
         }
     }
+
 
 }
