@@ -3,7 +3,7 @@ package com.example.tinder.service.profileService;
 import com.example.tinder.model.dto.ProfileDto;
 import com.example.tinder.model.dto.UserDto;
 import com.example.tinder.model.entity.ProfileEntity;
-import com.example.tinder.model.repository.PeopleRepo.ProfileRepository;
+import com.example.tinder.model.repository.profileRepo.ProfileRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +20,9 @@ public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepository profileRepository;
     public static int currentProfileIndex = 0;
-
     @Override
     public List<ProfileEntity> getAllUsers() {
-        return profileRepository.users();
+        return profileRepository.getAllUsers(); // Tüm kullanıcıları almak için repository metodunu kullanın
     }
 
     @Override
@@ -35,55 +34,54 @@ public class ProfileServiceImpl implements ProfileService {
     public void likeGet(Model model, HttpSession session) {
         List<ProfileEntity> allUsers = getAllUsers();
 
-        if (currentProfileIndex == allUsers.size()){
-            currentProfileIndex=0;
+        Integer currentProfileIndex = (Integer) session.getAttribute("currentProfileIndex");
+        if (currentProfileIndex == null || currentProfileIndex >= allUsers.size()) {
+            currentProfileIndex = 0;
         }
+
         ProfileEntity entity = allUsers.get(currentProfileIndex);
-
         ProfileDto profileDto = new ProfileDto(entity.getUsername(), entity.getPhotoUrl(), entity.getUserId());
-        session.setAttribute("profileDto", profileDto);//usersler
+        session.setAttribute("profileDto", profileDto);
 
-        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");//login olmush user
-
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
 
         if (profileDto.getUserId() == loggedInUser.getId()) {
-
+            // Eğer profil, giriş yapmış kullanıcıya aitse, bir sonraki profili göster
             currentProfileIndex++;
-            if (currentProfileIndex == allUsers.size()){
-                currentProfileIndex=0;
+            session.setAttribute("currentProfileIndex",currentProfileIndex);
+            if (currentProfileIndex >= allUsers.size()) {
+                currentProfileIndex = 0;
             }
-            ProfileEntity entity2 = allUsers.get(currentProfileIndex);
-            ProfileDto profileDto2 = new ProfileDto(entity2.getUsername(), entity2.getPhotoUrl(), entity2.getUserId());
-
-            model.addAttribute("username", profileDto2.getUsername());
-            model.addAttribute("photoUrl", profileDto2.getPhotoUrl());
-        } else {
-            model.addAttribute("username", profileDto.getUsername());
-            model.addAttribute("photoUrl", profileDto.getPhotoUrl());
-            currentProfileIndex++;
+            entity = allUsers.get(currentProfileIndex);
+            profileDto = new ProfileDto(entity.getUsername(), entity.getPhotoUrl(), entity.getUserId());
+            session.setAttribute("profileDto", profileDto);
         }
-
+        model.addAttribute("username", profileDto.getUsername());
+        model.addAttribute("photoUrl", profileDto.getPhotoUrl());
     }
-
 
     @Override
     public void likePost(HttpSession session, boolean like) {
-        if (like) {
-            UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
-            long loggedInUserId = loggedInUser.getId();
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+        ProfileDto profileDto = (ProfileDto) session.getAttribute("profileDto");
 
-            ProfileDto profileDto = (ProfileDto) session.getAttribute("profileDto");
-            long userId = profileDto.getUserId();
-            if (loggedInUserId == userId){
-                return;
-            }
-            log.info("loggedInUser "+ loggedInUserId);
-            log.info("profileDto " + userId);
-
-            likeOrDislike(true, loggedInUserId, userId);
+        if (loggedInUser != null && profileDto != null && loggedInUser.getId() != profileDto.getUserId()) {
+            likeOrDislike(like, loggedInUser.getId(), profileDto.getUserId());
         } else {
-            log.warn("some problem in like proses !");
+            log.warn("Beğenme işlemi sırasında bir sorun oluştu!");
+        }
+
+        // Profil listesindeki sırayı güncelle
+        Integer currentProfileIndex = (Integer) session.getAttribute("currentProfileIndex");
+        log.info(currentProfileIndex.toString());
+        if (currentProfileIndex != null) {
+            currentProfileIndex++;
+            if (currentProfileIndex >= getAllUsers().size()) {
+                currentProfileIndex = 0;
+            }
+            session.setAttribute("currentProfileIndex", currentProfileIndex);
         }
     }
-}
 
+
+}

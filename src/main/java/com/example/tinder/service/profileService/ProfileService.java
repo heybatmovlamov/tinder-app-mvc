@@ -17,4 +17,5 @@ public interface ProfileService {
     void likeGet(Model model, HttpSession session);
 
     void likePost(HttpSession session ,boolean like);
+
 }
