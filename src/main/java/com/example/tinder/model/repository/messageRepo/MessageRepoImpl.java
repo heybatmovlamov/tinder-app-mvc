@@ -32,21 +32,7 @@ public class MessageRepoImpl implements MessageRepository {
         return "Message inserted successfully!";
     }
 
-    @SneakyThrows
-    @Override
-    public List<Integer> chooseLikedUser(long userId) {
-        Connection connection = jdbcConfig.getConnection();
-        List<Integer> list = new ArrayList<>();
-        String likedUserSql = "SELECT likeduserid FROM liked_profiles WHERE userId = ?";
-        PreparedStatement likedPreparedStatement = connection.prepareStatement(likedUserSql);
-        likedPreparedStatement.setLong(1, userId);
-        ResultSet resultSet = likedPreparedStatement.executeQuery();
-        while (resultSet.next()) {
-            int likedUserId = resultSet.getInt("likeduserid");
-            list.add(likedUserId);
-        }
-        return list;
-    }
+
     @SneakyThrows
     @Override
     public String getMessage(long userId){

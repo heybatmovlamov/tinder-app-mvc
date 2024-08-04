@@ -8,5 +8,4 @@ import java.util.List;
 public interface MessageRepository {
     String sendMessage(String message , long userId);
     String getMessage(long userId);
-    List<Integer> chooseLikedUser(long id);
 }

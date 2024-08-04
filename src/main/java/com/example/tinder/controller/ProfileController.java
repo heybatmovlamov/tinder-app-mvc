@@ -33,7 +33,7 @@ public class ProfileController {
     @PostMapping("/like")
     public String likePost(HttpSession session, @RequestParam boolean like) {
         profileService.likePost(session, like);
-        return "redirect:/like"; // Sayfayı yenilemek için yönlendirme
+        return "redirect:/like";
     }
 }
 
